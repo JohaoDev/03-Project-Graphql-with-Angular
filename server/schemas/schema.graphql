@@ -27,9 +27,9 @@ type Mutation {
   updateCourse(_id: ID!, input: EditCourseInput): [Course]
   deleteCourse(_id: ID!): [Course]
 
-  createPerson(input: PersonInput!): [Person]
+  createPerson(input: PersonInput!): Boolean
   updatePerson(_id: ID!, input: EditPersonInput): [Person]
-  deletePerson(_id: ID!): [Person]
+  deletePerson(_id: ID!): Boolean
 }
 
 input CourseInput {

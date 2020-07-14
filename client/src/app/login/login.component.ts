@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import { Apollo } from 'apollo-angular';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 import gql from 'graphql-tag';
+import { PermissionsService } from '../services/permissions.service';
 
 const loginAuth = gql`
-  {
-    dogs {
-      id
-      breed
-    }
+  query login($email: String, $password: String) {
+    login(email: $email, password: $password)
   }
 `;
 
@@ -19,38 +19,56 @@ const loginAuth = gql`
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
-  login: Observable<any>;
+export class LoginComponent implements OnInit, OnDestroy {
+  loginForm: FormGroup;
+  dataLogin;
 
-  constructor(private apollo: Apollo) {}
+  private querySubscription: Subscription;
 
-  ngOnInit(): void {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private apollo: Apollo,
+    private permissions: PermissionsService,
+    private router: Router
+  ) {}
 
-  _login() {
-    this.login = this.apollo
-      .watchQuery({
-        query: loginAuth,
-      })
-      .valueChanges.pipe(map((result) => result.data));
+  ngOnInit(): void {
+    this._loginForm();
+    this._login();
   }
 
-  //   this.courses = this.apollo.watchQuery<Query>({
-  //     query: gql`
-  //       query allCourses {
-  //         allCourses {
-  //           id
-  //           title
-  //           author
-  //           description
-  //           topic
-  //           url
-  //         }
-  //       }
-  //     `
-  //   })
-  //     .valueChanges
-  //     .pipe(
-  //       map(result => result.data.allCourses)
-  //     );
-  // }
+  ngOnDestroy() {
+    this.querySubscription.unsubscribe();
+  }
+
+  _loginForm = () => {
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required]],
+      password: ['', [Validators.required]],
+    });
+  };
+
+  _login() {
+    let email = this.loginForm.get('email').value,
+      password = this.loginForm.get('password').value;
+
+    this.querySubscription = this.apollo
+      .watchQuery<any>({
+        query: loginAuth,
+        variables: {
+          email,
+          password,
+        },
+      })
+      .valueChanges.subscribe(({ data }) => {
+        if (data.login !== null) {
+          this.dataLogin = data;
+          this.permissions.decodeToken(data.login.token);
+          this.router.navigate(['/home']);
+          console.log(this.permissions.getUserLogin());
+        } else {
+          console.log('data null');
+        }
+      });
+  }
 }

@@ -1,18 +1,21 @@
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
 
 let User = require("../../models/userModel");
 
 module.exports = {
   createPerson: async (_, { input }) => {
-    let persons, email = input.email;
+    let persons,
+      created = false,
+      email = input.email;
     try {
       await User.create(input);
       persons = await User.find({ email });
       console.log(persons);
+      created = true;
     } catch (error) {
       console.error(error);
     }
-    return persons;
+    return created;
   },
 
   updatePerson: async (_, { _id, input }) => {
@@ -27,14 +30,14 @@ module.exports = {
   },
 
   deletePerson: async (_, { _id }) => {
-    let persons;
+    let deleted = false;
     try {
       await User.deleteOne({ _id });
-      persons = await User.find();
+      deleted = true;
     } catch (error) {
       console.error(error);
     }
-    return persons;
+    return deleted;
   },
 };
 
@@ -64,10 +67,6 @@ module.exports = {
 //   }
 
 /* DELETE USERS */
-// mutation {
-// deleteStudent(_id: "5f06838ffd001e6e113e0f89") {
-// _id
-// email
-// password
-// }
+// mutation deleteUser($_id: ID!) {
+// deletePerson(_id: $_id)
 // }

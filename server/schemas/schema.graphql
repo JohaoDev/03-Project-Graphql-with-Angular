@@ -1,0 +1,127 @@
+enum Level {
+  Basic
+  Intermediate
+  Advanced
+}
+
+enum AcademicTitle {
+  Third_level
+  Master
+  PhD
+}
+
+scalar JSON
+
+type Query {
+  getCourses: [Course]
+  getCourse(_id: ID!): [Course]
+
+  getPersons: [Person]
+  getPerson(_id: ID!): [Person]
+
+  login(email: String, password: String): JSON
+}
+
+type Mutation {
+  createCourse(input: CourseInput!): [Course]
+  updateCourse(_id: ID!, input: EditCourseInput): [Course]
+  deleteCourse(_id: ID!): [Course]
+
+  createPerson(input: PersonInput!): [Person]
+  updatePerson(_id: ID!, input: EditPersonInput): [Person]
+  deletePerson(_id: ID!): [Person]
+}
+
+input CourseInput {
+  title: String
+  professor: String
+  description: String
+  topic: String
+  level: Level
+}
+
+input EditCourseInput {
+  title: String
+  professor: String
+  description: String
+  topic: String
+  participants: [ID]
+  level: Level
+}
+
+input PersonInput {
+  name: String
+  lastname: String
+  age: String
+  email: String
+  profile_pic: String
+  password: String
+  role: String
+  academicTitle: AcademicTitle
+}
+
+input EditPersonInput {
+  name: String
+  lastname: String
+  age: String
+  email: String
+  profile_pic: String
+  password: String
+  role: String
+  academicTitle: AcademicTitle
+}
+
+type Course {
+  _id: ID!
+  title: String
+  professor: Professor
+  description: String
+  topic: String
+  participants: [Student]
+  level: Level
+}
+
+interface Person {
+  _id: ID!
+  name: String
+  lastname: String
+  email: String
+  profile_pic: String
+  password: String
+  role: String
+}
+
+# type User {
+#   _id: ID!
+#   name: String
+#   lastname: String
+#   email: String
+#   profile_pic: String
+#   password: String
+#   role: String
+#   academicTitle: AcademicTitle
+# }
+
+type Student implements Person {
+  _id: ID!
+  name: String
+  lastname: String
+  age: String
+  email: String
+  profile_pic: String
+  password: String
+  role: String
+  foto: String
+}
+
+type Professor implements Person {
+  _id: ID!
+  name: String
+  lastname: String
+  age: String
+  email: String
+  profile_pic: String
+  password: String
+  role: String
+  academicTitle: AcademicTitle
+}

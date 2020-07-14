@@ -1,0 +1,71 @@
+<div class="leading-loose">
+  <form
+    class="max-w-xl m-4 p-10 bg-white rounded shadow-xl"
+    [formGroup]="createUserForm"
+  >
+    <p class="text-gray-800 font-medium">User information</p>
+    <div class="mt-2">
+      <label class="block text-sm">Name</label>
+      <input
+        class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+        formControlName="name"
+        type="text"
+        placeholder="Your Name"
+      />
+    </div>
+    <div class="mt-2">
+      <label class="block text-sm">Lastname</label>
+      <input
+        class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+        formControlName="lastname"
+        type="text"
+        placeholder="Your Lastname"
+      />
+    </div>
+    <div class="mt-2">
+      <label class="block text-sm">Age</label>
+      <input
+        class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+        formControlName="age"
+        type="number"
+        placeholder="Your Age"
+      />
+    </div>
+    <div class="mt-2">
+      <label class="block text-sm">Email</label>
+      <input
+        class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+        formControlName="email"
+        type="email"
+        placeholder="Your Email"
+      />
+    </div>
+    <div class="mt-2">
+      <label class="block text-sm">Password</label>
+      <input
+        class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+        formControlName="password"
+        type="password"
+        placeholder="Your Password"
+      />
+    </div>
+    <div class="mt-2">
+      <label class="block text-sm">Confirm password</label>
+      <input
+        class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+        formControlName="confirmPassword"
+        type="password"
+        placeholder="Confirm Your Password"
+      />
+    </div>
+    <div class="mt-4">
+      <button
+        class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded"
+        type="submit"
+        (click)="registerUser()"
+      >
+        Grabar
+      </button>
+    </div>
+  </form>
+</div>

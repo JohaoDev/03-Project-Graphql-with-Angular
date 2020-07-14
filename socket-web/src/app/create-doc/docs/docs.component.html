@@ -1,0 +1,13 @@
+<h1>
+  Last modification by:
+  <span [(ngModel)]="document.userName">{{ document.userName }}</span>
+</h1>
+
+<div class="h-screen py-4">
+  <textarea
+    class="w-full h-full text-sm rounded-lg resize-none border border-gray-700 px-6 py-6"
+    [(ngModel)]="document.doc"
+    (keyup)="editDoc()"
+    placeholder="Write your text..."
+  ></textarea>
+</div>

@@ -10,6 +10,7 @@ let app = express(),
   userRoutes = require("../routes/users.routes"),
   courseRoutes = require("../routes/courses.routes"),
   roleRoutes = require("../routes/roles.routes"),
+  multerRoutes = require("../routes/multer.routes"),
   db = connectDB(),
   sess = {
     //SESSION CONFIG
@@ -64,5 +65,6 @@ app.get("/", (req, res) => {
 app.use("/api", userRoutes);
 app.use("/api", courseRoutes);
 app.use("/api", roleRoutes);
+app.use("/api", multerRoutes);
 
 module.exports = app;

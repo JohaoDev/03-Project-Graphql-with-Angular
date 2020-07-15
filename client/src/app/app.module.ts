@@ -39,7 +39,7 @@ import { RolesComponent } from './roles/roles.component';
 export class AppModule {
   constructor(apollo: Apollo, httpLink: HttpLink) {
     apollo.create({
-      link: httpLink.create({ uri: 'http://localhost:3500/graphql' }),
+      link: httpLink.create({ uri: 'http://localhost:3500/graphql/' }),
       cache: new InMemoryCache(),
     });
   }

@@ -52,41 +52,41 @@ export class NewUserComponent implements OnInit, OnDestroy {
 
   registerUser(): void {
     this.dataUser = {
-      input: {
-        name: this.createUserForm.get('name').value,
-        lastname: this.createUserForm.get('lastname').value,
-        age: this.createUserForm.get('age').value,
-        email: this.createUserForm.get('email').value,
-        password: this.createUserForm.get('password').value,
+      data: {
+        name: `${this.createUserForm.get('name').value}`,
+        lastname: `${this.createUserForm.get('lastname').value}`,
+        age: `${this.createUserForm.get('age').value}`,
+        email: `${this.createUserForm.get('email').value}`,
+        password: `${this.createUserForm.get('password').value}`,
       },
     };
 
     let confirmPassword = this.createUserForm.get('confirmPassword').value;
 
-    if (this.dataUser.input.password === confirmPassword) {
+    if (this.dataUser.data.password === confirmPassword) {
       if (
-        this.dataUser.input.name &&
-        this.dataUser.input.lastname &&
-        this.dataUser.input.email
+        this.dataUser.data.name &&
+        this.dataUser.data.lastname &&
+        this.dataUser.data.email
       ) {
-        let dataUser = {
-          input: this.dataUser,
-        };
-
         this.postSubscription = this.apollo
-          .mutate({
+          .mutate<any>({
             mutation: postUser,
             variables: {
-              input: dataUser,
+              input: this.dataUser.data,
             },
           })
-          .subscribe(({ data }) => {
-            console.log(data);
-          });
-
-        // if (savedUser !== []) {
-        //   this.router.navigate(['users']);
-        // }
+          .subscribe(
+            ({ data }) => {
+              console.log(data);
+              data.createPerson
+                ? this.router.navigate(['users'])
+                : alert('something went wrong, try again pls');
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
       } else {
         console.log('Fill al the gaps to continue please');
       }

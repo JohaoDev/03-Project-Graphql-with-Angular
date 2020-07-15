@@ -1,27 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+
+import Swal from 'sweetalert2';
+
+import { Apollo } from 'apollo-angular';
+import { Subscription } from 'rxjs';
+
+import gql from 'graphql-tag';
 
 // import { CrudService } from '../../services/crud.service';
 // import { FilesService } from '../../services/files.service.js';
 // import { DataRx } from 'src/app/models/data-rx';
+const editUser = gql`
+  mutation editUser($_id: ID!, $input: EditPersonInput) {
+    updatePerson(_id: $_id, input: $input)
+  }
+`;
 
 @Component({
   selector: 'app-edit-user',
   templateUrl: './edit-user.component.html',
   styleUrls: ['./edit-user.component.scss'],
 })
-export class EditUserComponent implements OnInit {
+export class EditUserComponent implements OnInit, OnDestroy {
   editUserForm: FormGroup;
   userData: any;
   seeFile: any;
 
+  private updateSubscription: Subscription;
+
   constructor(
     private formBuilder: FormBuilder,
     // private crudService: CrudService,
-    private router: Router
-  ) // private filesService: FilesService
-  {}
+    private router: Router, // private filesService: FilesService
+    private apollo: Apollo
+  ) {}
 
   ngOnInit(): void {
     this._getUserData();
@@ -32,12 +46,17 @@ export class EditUserComponent implements OnInit {
     // );
   }
 
+  ngOnDestroy() {
+    this.updateSubscription.unsubscribe();
+  }
+
   private _getUserData() {
     this.userData = JSON.parse(localStorage.getItem('userData'));
   }
 
   _editUserForm = () => {
     this.editUserForm = this.formBuilder.group({
+      _id: [this.userData._id],
       name: [this.userData.name, [Validators.required]],
       lastname: [this.userData.lastname, [Validators.required]],
       age: [this.userData.age, [Validators.required]],
@@ -48,16 +67,35 @@ export class EditUserComponent implements OnInit {
   };
 
   _update(): void {
-    let updateData = {
+    let update = {
       data: {
-        name: this.editUserForm.get('name').value,
-        lastname: this.editUserForm.get('lastname').value,
-        age: this.editUserForm.get('age').value,
-        email: this.editUserForm.get('email').value,
-        password: this.editUserForm.get('password').value,
-        profile_pic: this.editUserForm.get('profile_pic').value,
+        name: `${this.editUserForm.get('name').value}`,
+        lastname: `${this.editUserForm.get('lastname').value}`,
+        age: `${this.editUserForm.get('age').value}`,
+        email: `${this.editUserForm.get('email').value}`,
+        password: `${this.editUserForm.get('password').value}`,
       },
     };
+
+    this.updateSubscription = this.apollo
+      .mutate<any>({
+        mutation: editUser,
+        variables: {
+          _id: this.userData._id,
+          input: update.data,
+        },
+      })
+      .subscribe(
+        ({ data }) => {
+          console.log(data);
+          data.updatePerson
+            ? this.router.navigate(['users'])
+            : alert('something went wrong, try again pls');
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
 
     // let updatedUser = this.crudService.patchData(
     //   updateData,

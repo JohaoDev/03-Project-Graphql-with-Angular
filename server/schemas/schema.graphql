@@ -19,6 +19,9 @@ type Query {
   getPersons: [Person]
   getPerson(_id: ID!): [Person]
 
+  getRoles: [Role]
+  getRole(_id: ID!): [Role]
+
   login(email: String, password: String): JSON
 }
 
@@ -30,6 +33,10 @@ type Mutation {
   createPerson(input: PersonInput!): Boolean
   updatePerson(_id: ID!, input: EditPersonInput): [Person]
   deletePerson(_id: ID!): Boolean
+
+  createRole(input: RoleInput!): Boolean
+  updateRole(_id: ID!, input: EditRoleInput): [Role]
+  deleteRole(_id: ID!): Boolean
 }
 
 input CourseInput {
@@ -69,6 +76,16 @@ input EditPersonInput {
   password: String
   role: String
   academicTitle: AcademicTitle
+}
+
+input RoleInput {
+  name: String
+  description: String
+}
+
+input EditRoleInput {
+  name: String
+  description: String
 }
 
 type Course {
@@ -124,4 +141,10 @@ type Professor implements Person {
   password: String
   role: String
   academicTitle: AcademicTitle
+}
+
+type Role {
+  _id: ID!
+  name: String
+  description: Professor
 }

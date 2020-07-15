@@ -9,9 +9,6 @@ import { Subscription } from 'rxjs';
 
 import gql from 'graphql-tag';
 
-// import { CrudService } from '../../services/crud.service';
-// import { FilesService } from '../../services/files.service.js';
-// import { DataRx } from 'src/app/models/data-rx';
 const editUser = gql`
   mutation editUser($_id: ID!, $input: EditPersonInput) {
     updatePerson(_id: $_id, input: $input)
@@ -32,18 +29,13 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    // private crudService: CrudService,
-    private router: Router, // private filesService: FilesService
+    private router: Router,
     private apollo: Apollo
   ) {}
 
   ngOnInit(): void {
     this._getUserData();
     this._editUserForm();
-    // this.seeFile = this.filesService.getFile(
-    //   'gallery',
-    //   this.userData.profile_pic
-    // );
   }
 
   ngOnDestroy() {
@@ -89,23 +81,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
         ({ data }) => {
           console.log(data);
           data.updatePerson
-            ? this.router.navigate(['users'])
+            ? this.router.navigate(['/users'])
             : alert('something went wrong, try again pls');
         },
         (err) => {
           console.log(err);
         }
       );
-
-    // let updatedUser = this.crudService.patchData(
-    //   updateData,
-    //   'user',
-    //   this.userData._id
-    // );
-
-    // if (updatedUser !== []) {
-    //   this.router.navigate(['/users']);
-    //   localStorage.clear();
-    // }
   }
 }

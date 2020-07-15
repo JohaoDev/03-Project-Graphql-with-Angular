@@ -26,9 +26,9 @@ type Query {
 }
 
 type Mutation {
-  createCourse(input: CourseInput!): [Course]
-  updateCourse(_id: ID!, input: EditCourseInput): [Course]
-  deleteCourse(_id: ID!): [Course]
+  createCourse(input: CourseInput!): Boolean
+  updateCourse(_id: ID!, input: EditCourseInput): Boolean
+  deleteCourse(_id: ID!): Boolean
 
   createPerson(input: PersonInput!): Boolean
   updatePerson(_id: ID!, input: EditPersonInput): Boolean

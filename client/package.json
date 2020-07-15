@@ -29,6 +29,7 @@
     "graphql": "^15.3.0",
     "graphql-tag": "^2.10.4",
     "jwt-decode": "^2.2.0",
+    "ngx-spinner": "^9.0.2",
     "rxjs": "~6.5.5",
     "sweetalert2": "^9.17.0",
     "tslib": "^2.0.0",

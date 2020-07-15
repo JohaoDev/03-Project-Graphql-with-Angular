@@ -22,6 +22,7 @@ module.exports = {
   updatePerson: async (_, { _id, input }) => {
     let person,
       updated = false;
+
     try {
       await User.updateOne({ _id }, { $set: input });
       // person = await User.find({ _id });

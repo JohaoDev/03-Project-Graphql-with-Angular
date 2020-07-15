@@ -31,7 +31,7 @@ const deleteUser = gql`
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, OnDestroy {
   userData = [];
 
   private querySubscription: Subscription;
@@ -40,16 +40,6 @@ export class UsersComponent implements OnInit {
   constructor(private apollo: Apollo, private router: Router) {}
 
   ngOnInit(): void {
-    this.getUsers();
-    this.deleteSubscription;
-  }
-
-  // ngOnDestroy(): void {
-  //   this.querySubscription.unsubscribe();
-  //   this.deleteSubscription.unsubscribe();
-  // }
-
-  getUsers(): void {
     this.querySubscription = this.apollo
       .watchQuery<any>({
         query: getUsers,
@@ -57,6 +47,10 @@ export class UsersComponent implements OnInit {
       .valueChanges.subscribe(({ data }) => {
         this.userData = data.getPersons;
       });
+  }
+
+  ngOnDestroy(): void {
+    this.querySubscription.unsubscribe();
   }
 
   delete(_id) {
@@ -70,6 +64,8 @@ export class UsersComponent implements OnInit {
       .subscribe(({ data }: any) => {
         if (data.deletePerson) {
           window.location.reload();
+          this.deleteSubscription.unsubscribe();
+
           // this.router
           //   .navigateByUrl('/', { skipLocationChange: true })
           //   .then(() => {

@@ -61,6 +61,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         },
       })
       .valueChanges.subscribe(({ data }) => {
+        console.log(data);
         if (data.login !== null) {
           this.dataLogin = data;
           this.permissions.decodeToken(data.login.token);

@@ -5,10 +5,16 @@ let User = require("../../models/userModel");
 module.exports = {
   createPerson: async (_, { input }) => {
     let persons,
-      created = false,
-      email = input.email;
+      created = false;
 
     try {
+      let encodePassword = bcrypt.hashSync(
+        input.password,
+        bcrypt.genSaltSync(10)
+      );
+      input.password = encodePassword;
+      input.createAt = new Date();
+
       await User.create(input);
       // persons = await User.find({ email });
       // console.log(persons);

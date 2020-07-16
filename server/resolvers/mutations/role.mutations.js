@@ -13,14 +13,16 @@ module.exports = {
   },
 
   updateRole: async (_, { _id, input }) => {
-    let role;
+    let role,
+      updated = false;
     try {
-      await User.updateOne({ _id }, { $set: input });
-      role = await Role.find({ _id });
+      await Role.updateOne({ _id }, { $set: input });
+      // role = await Role.find({ _id });
+      updated = true;
     } catch (error) {
       console.error(error);
     }
-    return role;
+    return updated;
   },
 
   deleteRole: async (_, { _id }) => {

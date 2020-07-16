@@ -35,7 +35,7 @@ type Mutation {
   deletePerson(_id: ID!): Boolean
 
   createRole(input: RoleInput!): Boolean
-  updateRole(_id: ID!, input: EditRoleInput): [Role]
+  updateRole(_id: ID!, input: EditRoleInput): Boolean
   deleteRole(_id: ID!): Boolean
 }
 
@@ -91,7 +91,7 @@ input EditRoleInput {
 type Course {
   _id: ID!
   title: String
-  professor: Professor
+  professor: String
   description: String
   topic: String
   participants: [Student]
@@ -146,5 +146,5 @@ type Professor implements Person {
 type Role {
   _id: ID!
   name: String
-  description: Professor
+  description: String
 }
